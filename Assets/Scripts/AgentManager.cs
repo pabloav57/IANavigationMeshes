@@ -1,13 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AgentManager : MonoBehaviour
 {
-    GameObject[] agents;
+    List<NavMeshAgent> agents = new List<NavMeshAgent>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        agents = GameObject.FindGameObjectsWithTag("AI");
+        GameObject[] a = GameObject.FindGameObjectsWithTag("AI");
+        foreach (GameObject go in a )
+        {
+            agents.Add(go.GetComponent<NavMeshAgent>());
+        }
     }
 
     // Update is called once per frame
@@ -18,8 +24,8 @@ public class AgentManager : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
-                foreach(GameObject a in agents)
-                a.GetComponent<AIController>().agent.SetDestination(hit.point);
+                foreach(NavMeshAgent a in agents)
+                    a.SetDestination(hit.point);
             }
         }
 
